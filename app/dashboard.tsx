@@ -249,9 +249,10 @@ function useDashboardState() {
   }, [pool]);
 
   const handleAutoBuild = useCallback(() => {
-    const target = Math.min(Math.max(1, filter?.count ?? 3), Math.max(1, pool.length));
-    handleCombine(Math.min(target, 6));
-  }, [filter, pool, handleCombine]);
+    const target = filter?.count;
+    if (!filterActive || !target || target > 6 || pool.length < target || filter.warnings.length > 0) return;
+    handleCombine(target);
+  }, [filter, filterActive, pool, handleCombine]);
 
   const clearSlip = useCallback(() => {
     setSelection([]);
@@ -366,7 +367,7 @@ export function FixturePage() {
             }}
             description={filter ? describeFilter(filter) : ""}
             poolCount={pool.length}
-            canAutoBuild={parsedCount !== null && pool.length > 0}
+            canAutoBuild={filterActive && filter !== null && parsedCount !== null && parsedCount <= 6 && pool.length >= parsedCount && filter.warnings.length === 0}
             onAutoBuild={() => {
               handleAutoBuild();
               router.push("/accumulator");
@@ -475,6 +476,11 @@ export function AccumulatorPage() {
           <Sparkles size={15} />
           <span>Fixture filters: {[filter && filterActive ? describeFilter(filter) : "", ...fixtureFilterDescription].filter(Boolean).join(" · ")} · {pool.length} matching. New combinations use this pool; existing slips stay unchanged.</span>
           <Link href="/fixtures" className="ml-auto font-semibold underline underline-offset-4">Edit filter</Link>
+        </div>
+      )}
+      {filter && filterActive && filter.warnings.length > 0 && (
+        <div role="status" className="mb-4 rounded-xl border border-amber-400/25 bg-amber-400/10 px-4 py-3 text-xs leading-5 text-amber-200">
+          {filter.warnings.map((warning) => <p key={warning}>{warning}</p>)}
         </div>
       )}
       {loading && fixtures.length === 0 && (
@@ -628,7 +634,7 @@ function PromptBar({
         <div>
           <p className="eyebrow"><Sparkles size={12} /> Natural language filter</p>
           <h3 className="mt-2 text-lg font-semibold tracking-tight text-white">Find your kind of match</h3>
-          <p className="mt-1 text-xs leading-5 text-slate-400">Describe the predictions you want to see.</p>
+          <p className="mt-1 text-xs leading-5 text-slate-400">Find results, odds, confidence, 2.5-goal and correct-score predictions, and available leagues. This is a rules-based filter, not AI.</p>
         </div>
         <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Prompt finder</span>
       </div>
@@ -642,7 +648,7 @@ function PromptBar({
             value={prompt}
             aria-label="Describe the matches you want"
             onChange={(e) => onPrompt(e.target.value)}
-            placeholder='Try "Find 4 home wins with odds over 1.60" or "2 away wins in Serie A"…'
+            placeholder='Try "3 home wins, 10/10 confidence and over 2.5 goals"…'
             className="glass-input pl-11"
           />
         </div>
@@ -655,6 +661,19 @@ function PromptBar({
           Parse prompt
         </button>
       </form>
+
+      <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+        <span>Try:</span>
+        {[
+          "3 home wins with odds between 1.5 and 2.5",
+          "10/10 confidence and over 2.5 goals",
+          "away or draw with odds above 2",
+        ].map((example) => (
+          <button key={example} type="button" onClick={() => onPrompt(example)} className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-left text-slate-300 transition hover:border-cyan-300/30 hover:text-white">
+            {example}
+          </button>
+        ))}
+      </div>
 
       {filter && (
         <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -676,9 +695,17 @@ function PromptBar({
               <Dices size={14} /> Auto-build acca ({String(filter.count ?? 3)})
             </button>
           )}
+          {filterActive && filter.count !== null && !canAutoBuild && (
+            <span className="text-xs text-slate-400">Auto-build requires 1–6 matches, enough matching fixtures, and no unsupported conditions.</span>
+          )}
           <button onClick={onClearFilter} className="btn-ghost px-2.5 py-1 text-xs">
             <X size={13} /> Clear
           </button>
+        </div>
+      )}
+      {filter && filter.warnings.length > 0 && (
+        <div role="status" className="mt-3 rounded-xl border border-amber-400/25 bg-amber-400/10 px-4 py-3 text-xs leading-5 text-amber-200">
+          {filter.warnings.map((warning) => <p key={warning}>{warning}</p>)}
         </div>
       )}
     </div>

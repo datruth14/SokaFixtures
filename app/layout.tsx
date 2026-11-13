@@ -5,7 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "SokaFix · Football Fixtures & Accumulator Builder",
   description:
-    "Aggregated football fixtures with AI-powered prompting, predictions, odds and instant multi-leg accumulator construction.",
+    "Football fixtures, prediction filters, odds and multi-leg accumulator construction.",
 };
 
 export default function RootLayout({
