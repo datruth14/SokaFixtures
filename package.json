@@ -1,5 +1,5 @@
 {
-  "name": "prediction",
+  "name": "sokafix",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -9,7 +9,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "tsc --module commonjs --moduleResolution node --target es2022 --esModuleInterop --skipLibCheck --outDir .next/tests tests/*.test.ts && node --test .next/tests/tests/*.test.js"
   },
   "dependencies": {
     "cheerio": "^1.0.0",

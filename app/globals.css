@@ -6,6 +6,15 @@
   color-scheme: dark;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @layer base {
   html {
     @apply antialiased;
@@ -14,26 +23,40 @@
   body {
     @apply bg-slate-950 text-slate-200;
     background-image:
-      radial-gradient(60rem 40rem at 85% -10%, rgba(56, 189, 248, 0.08), transparent 60%),
-      radial-gradient(50rem 38rem at -10% 20%, rgba(168, 85, 247, 0.07), transparent 60%);
+      radial-gradient(55rem 38rem at 90% -10%, rgba(39, 128, 175, 0.16), transparent 65%),
+      radial-gradient(45rem 35rem at -10% 45%, rgba(104, 76, 174, 0.10), transparent 65%),
+      linear-gradient(160deg, #07101d 0%, #080d19 55%, #0a1020 100%);
+    background-attachment: fixed;
   }
 
   ::selection {
     @apply bg-sky-500/30 text-white;
   }
+
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-sky-300;
+  }
 }
 
 @layer components {
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-200/80;
+  }
+
   .glass-card {
-    @apply rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-xl shadow-black/30;
+    @apply rounded-[1.4rem] border border-white/10 backdrop-blur-xl;
+    background: linear-gradient(145deg, rgba(31, 48, 65, 0.60), rgba(14, 23, 38, 0.72));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055), 0 18px 55px rgba(0, 0, 0, 0.15);
   }
 
   .glass-card-accent {
-    @apply rounded-2xl border border-sky-500/20 bg-sky-500/[0.04] backdrop-blur-md shadow-xl shadow-black/30;
+    @apply rounded-[1.4rem] border border-sky-200/10 backdrop-blur-xl;
+    background: linear-gradient(125deg, rgba(30, 79, 101, 0.48), rgba(26, 38, 61, 0.68) 55%, rgba(49, 37, 78, 0.44));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 20px 65px rgba(0, 0, 0, 0.18);
   }
 
   .glass-input {
-    @apply w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 outline-none transition focus:border-sky-500/50 focus:bg-white/[0.07] focus:ring-2 focus:ring-sky-500/10;
+    @apply w-full rounded-xl border border-white/10 bg-slate-950/40 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 outline-none transition focus:border-sky-400/60 focus:bg-slate-950/50 focus:ring-2 focus:ring-sky-400/10;
   }
 
   .chip {
@@ -53,7 +76,7 @@
   }
 
   .btn-solid {
-    @apply btn border border-sky-400/50 bg-sky-500 text-slate-950 hover:bg-sky-400;
+    @apply btn border border-cyan-200/50 bg-cyan-200 text-slate-950 hover:bg-cyan-100;
   }
 
   .btn-purple {

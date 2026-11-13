@@ -120,7 +120,9 @@ function mapEvent(
     prediction,
     predictionPoints: points,
     correctScore: event.predictionScore ?? "",
-    overUnder: event.predictionOu === "O" ? "O" : "U",
+    overUnder: event.predictionOu === "O" || event.predictionOu === "U"
+      ? event.predictionOu
+      : null,
     status: toStatus(event),
   };
 }
@@ -291,7 +293,7 @@ export function parseHtmlFixtures(
         prediction,
         predictionPoints: points,
         correctScore: "",
-        overUnder: "U",
+        overUnder: null,
         status: "scheduled",
       });
     }

@@ -26,7 +26,7 @@ export interface Fixture {
   prediction: Outcome;
   predictionPoints: number;
   correctScore: string;
-  overUnder: "O" | "U";
+  overUnder: "O" | "U" | null;
   status: FixtureStatus;
 }
 
