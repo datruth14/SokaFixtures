@@ -576,6 +576,7 @@ function Header({
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
+          <Link href="/billing" className="btn-ghost text-xs">Account</Link>
           <span className="hidden items-center gap-2 text-xs text-slate-400 xl:inline-flex">
             <span className={`h-1.5 w-1.5 rounded-full ${meta.cached ? "bg-sky-400" : "bg-emerald-400"} animate-pulse-soft`} />
             {meta.source || "Loading"} <span className="text-slate-600">·</span> {totalMatches} fixtures <span className="text-slate-600">·</span> {time}

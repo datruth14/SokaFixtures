@@ -6,4 +6,9 @@ build/
 next-env.d.ts
 .DS_Store
 .env*.local
+.env
+.env.*
+!.env.example
+*.db
+*.db-*
 npm-debug.log*

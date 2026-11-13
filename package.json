@@ -10,14 +10,19 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
+    "db:migrate": "node scripts/migrate.mjs",
     "test": "tsc --module commonjs --moduleResolution node --target es2022 --esModuleInterop --skipLibCheck --outDir .next/tests tests/*.test.ts && node --test .next/tests/tests/*.test.js"
   },
   "dependencies": {
+    "@libsql/client": "^0.18.0",
+    "better-auth": "^1.7.23",
     "cheerio": "^1.0.0",
+    "drizzle-orm": "^0.45.4",
     "lucide-react": "^1.47.0",
     "next": "^15.1.6",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "resend": "^6.38.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.7",

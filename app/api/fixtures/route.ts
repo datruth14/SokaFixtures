@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getFixtures } from "@/lib/scraper";
+import { requirePremium } from "@/lib/billing/request";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,10 +10,12 @@ export async function GET(request: Request) {
   const refresh = searchParams.get("refresh") === "1";
 
   try {
+    const denied = await requirePremium(request);
+    if (denied) return denied;
     const data = await getFixtures({ refresh });
     return NextResponse.json(data, {
       headers: {
-        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",
+        "Cache-Control": "private, no-store",
       },
     });
   } catch (error) {

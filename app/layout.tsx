@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DashboardProvider } from "./dashboard";
+import { AccessShell } from "./access-shell";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen bg-slate-950 font-sans text-slate-200">
-        <DashboardProvider>{children}</DashboardProvider>
+        <AccessShell>{children}</AccessShell>
       </body>
     </html>
   );
