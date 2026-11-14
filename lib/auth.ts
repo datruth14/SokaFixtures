@@ -6,14 +6,26 @@ import { sendEmail } from "./email";
 
 let instance: ReturnType<typeof createAuth> | undefined;
 
-function createAuth() {
+function readConfig() {
   const secret = process.env.BETTER_AUTH_SECRET;
   const baseURL = process.env.BETTER_AUTH_URL;
-  if (!secret || secret.length < 32 || !baseURL) throw new Error("Authentication is not configured.");
-  const origin = new URL(baseURL);
-  if (origin.protocol !== "https:" && origin.hostname !== "localhost" && origin.hostname !== "127.0.0.1") {
-    throw new Error("BETTER_AUTH_URL must use HTTPS outside local development.");
+  if (!secret) throw new Error("BETTER_AUTH_SECRET is not set. Generate one with `openssl rand -base64 32`.");
+  if (secret.length < 32) throw new Error("BETTER_AUTH_SECRET must be at least 32 characters. Generate one with `openssl rand -base64 32`.");
+  if (!baseURL) throw new Error("BETTER_AUTH_URL is not set. Use the public URL of this deployment, for example https://example.com.");
+  let origin: URL;
+  try {
+    origin = new URL(baseURL);
+  } catch {
+    throw new Error(`BETTER_AUTH_URL is not a valid absolute URL: "${baseURL}". Include the scheme, for example https://example.com.`);
   }
+  if (origin.protocol !== "https:" && origin.hostname !== "localhost" && origin.hostname !== "127.0.0.1") {
+    throw new Error(`BETTER_AUTH_URL must use HTTPS outside local development: "${baseURL}".`);
+  }
+  return { secret, baseURL, origin };
+}
+
+function createAuth() {
+  const { secret, baseURL, origin } = readConfig();
   return betterAuth({
     secret,
     baseURL,
