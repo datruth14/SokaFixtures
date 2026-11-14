@@ -11,7 +11,7 @@ export function sameOrigin(request: Request): boolean {
 
 export async function authenticatedUser(request: Request) {
   const session = await getSession(request.headers);
-  if (!session?.user?.emailVerified) return null;
+  if (!session?.user) return null;
   return { id: session.user.id, email: session.user.email };
 }
 

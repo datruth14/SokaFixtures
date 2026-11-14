@@ -12,7 +12,7 @@ The current offer is a seven-day trial. Paystack collects a **₦50 card verific
 
 1. Create a dedicated Turso **libSQL** database. Review `db/migrations/0001_accounts_and_billing.sql` before applying it to an existing database: it creates tables named `user`, `session`, `account`, `verification`, `rateLimit`, and `billing_*`.
 2. Copy `.env.example` to `.env.local` and set the Turso URL and token, `BETTER_AUTH_URL`, and a high-entropy `BETTER_AUTH_SECRET` of at least 32 characters. Use HTTPS for deployed URLs. Do not commit secrets or paste them into chats.
-3. Add `RESEND_API_KEY` and `RESEND_FROM_EMAIL` with a verified Resend domain. Account verification and subscription emails depend on it. Set a random `CRON_SECRET` of at least 32 characters for Vercel's daily email retry and trial reminders.
+3. Add `RESEND_API_KEY` and `RESEND_FROM_EMAIL` with a verified Resend domain. Subscription and password-reset emails depend on it. Email verification at signup is currently disabled, so registration and sign-in do not require Resend. Set a random `CRON_SECRET` of at least 32 characters for Vercel's daily email retry and trial reminders.
 4. In **Paystack test mode**, create a monthly plan for **NGN 500,000 kobo (₦5,000)**. Set its `PAYSTACK_PLAN_CODE` and the matching test `PAYSTACK_SECRET_KEY`. The server checks the plan amount, currency, interval and mode before starting checkout.
 5. Apply the database migration to the intended database, for example using a locally configured `.env.local`:
 
@@ -25,7 +25,7 @@ The current offer is a seven-day trial. Paystack collects a **₦50 card verific
 
 ### Test before enabling live billing
 
-- Verify account registration, email delivery and verification, sign-in, password reset and sign-out.
+- Verify account registration, sign-in, sign-out and password reset.
 - With Paystack test cards, confirm the ₦50 verification succeeds, a full refund is requested and processed, the trial lasts at least seven days, and the first ₦5,000 debit is actually scheduled **after** the trial. Verify the next monthly renewal too.
 - Test cancelling before renewal, payment failure and card update, expired access, a returning subscriber, interrupted checkout, repeated callbacks, and duplicate or out-of-order webhooks. Check that no user receives two subscriptions or charges.
 - Verify signed webhooks, email delivery, the daily cron, and customer access from multiple browsers/devices. Ensure the app's domain, verified Resend domain and Paystack configuration are correct for production.

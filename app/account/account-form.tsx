@@ -27,11 +27,12 @@ export default function AccountForm({ initialMode }: { initialMode: "sign-in" | 
         const result = await authClient.requestPasswordReset({ email, redirectTo: `${window.location.origin}/reset-password` });
         setMessage(result.error ? "Unable to send the reset link. Please try again." : "If an account exists, a reset link has been sent.");
       } else if (mode === "sign-up") {
-        const result = await authClient.signUp.email({ name, email, password, callbackURL: `${window.location.origin}/billing` });
-        setMessage(result.error ? result.error.message ?? "Unable to create the account." : "If the account can be created, check your email for a verification link.");
+        const result = await authClient.signUp.email({ name, email, password });
+        if (result.error) setMessage(result.error.message ?? "Unable to create the account.");
+        else { router.push("/billing"); router.refresh(); }
       } else {
         const result = await authClient.signIn.email({ email, password });
-        if (result.error) setMessage("Unable to sign in. Check your details and verify your email.");
+        if (result.error) setMessage("Unable to sign in. Check your email and password.");
         else { router.push("/billing"); router.refresh(); }
       }
     } catch {
@@ -40,16 +41,6 @@ export default function AccountForm({ initialMode }: { initialMode: "sign-in" | 
   }
 
   function changeMode(next: Mode) { setMode(next); setMessage(""); }
-
-  async function resendVerification() {
-    if (!email || busy) { setMessage("Enter your email address first."); return; }
-    setBusy(true);
-    try {
-      const result = await authClient.sendVerificationEmail({ email, callbackURL: `${window.location.origin}/billing` });
-      setMessage(result.error ? "Unable to send a verification link. Please try again." : "If the account needs verification, a new link has been sent.");
-    } catch { setMessage("Unable to send a verification link. Please try again."); }
-    finally { setBusy(false); }
-  }
 
   return (
     <main className="flex min-h-screen items-center justify-center px-4 py-12">
@@ -73,7 +64,6 @@ export default function AccountForm({ initialMode }: { initialMode: "sign-in" | 
             <div className="flex flex-wrap justify-between gap-3 text-xs text-slate-400">
               <button type="button" onClick={() => changeMode(mode === "sign-up" ? "sign-in" : "sign-up")} className="hover:text-white">{mode === "sign-up" ? "Already have an account? Sign in" : "Create an account"}</button>
               {mode !== "forgot" && <button type="button" onClick={() => changeMode("forgot")} className="hover:text-white">Forgot password?</button>}
-              {mode === "sign-in" && <button type="button" onClick={() => void resendVerification()} disabled={busy} className="hover:text-white">Resend verification</button>}
               {mode === "forgot" && <button type="button" onClick={() => changeMode("sign-in")} className="hover:text-white">Back to sign in</button>}
             </div>
           </form>

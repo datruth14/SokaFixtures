@@ -35,19 +35,10 @@ function createAuth() {
     database: drizzleAdapter(database(), { provider: "sqlite", schema, transaction: true }),
     emailAndPassword: {
       enabled: true,
-      requireEmailVerification: true,
       minPasswordLength: 10,
       revokeSessionsOnPasswordReset: true,
       sendResetPassword: async ({ user, url }) => {
         await sendEmail({ to: user.email, subject: "Reset your SokaFix password", text: `Reset your SokaFix password using this link:\n\n${url}\n\nIf you did not request this, ignore this email.` });
-      },
-    },
-    emailVerification: {
-      sendOnSignUp: true,
-      sendOnSignIn: true,
-      autoSignInAfterVerification: true,
-      sendVerificationEmail: async ({ user, url }) => {
-        await sendEmail({ to: user.email, subject: "Verify your SokaFix email", text: `Verify your SokaFix email using this link:\n\n${url}\n\nIf you did not create an account, ignore this email.` });
       },
     },
     rateLimit: {
@@ -59,7 +50,6 @@ function createAuth() {
         "/sign-in/email": { window: 60, max: 5 },
         "/sign-up/email": { window: 60, max: 5 },
         "/request-password-reset": { window: 60, max: 3 },
-        "/send-verification-email": { window: 60, max: 3 },
       },
     },
     advanced: { ipAddress: { ipAddressHeaders: ["x-real-ip"] } },
