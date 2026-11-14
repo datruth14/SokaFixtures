@@ -3,23 +3,25 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { database } from "./db";
 import * as schema from "./db/schema";
 import { sendEmail } from "./email";
+import { normalizeBaseURL } from "./auth-url";
 
 let instance: ReturnType<typeof createAuth> | undefined;
 
 function readConfig() {
   const secret = process.env.BETTER_AUTH_SECRET;
-  const baseURL = process.env.BETTER_AUTH_URL;
+  const rawBaseURL = process.env.BETTER_AUTH_URL;
   if (!secret) throw new Error("BETTER_AUTH_SECRET is not set. Generate one with `openssl rand -base64 32`.");
   if (secret.length < 32) throw new Error("BETTER_AUTH_SECRET must be at least 32 characters. Generate one with `openssl rand -base64 32`.");
-  if (!baseURL) throw new Error("BETTER_AUTH_URL is not set. Use the public URL of this deployment, for example https://example.com.");
+  if (!rawBaseURL) throw new Error("BETTER_AUTH_URL is not set. Use the public URL of this deployment, for example https://example.com.");
+  const baseURL = normalizeBaseURL(rawBaseURL);
   let origin: URL;
   try {
     origin = new URL(baseURL);
   } catch {
-    throw new Error(`BETTER_AUTH_URL is not a valid absolute URL: "${baseURL}". Include the scheme, for example https://example.com.`);
+    throw new Error(`BETTER_AUTH_URL is not a valid absolute URL: "${rawBaseURL}". Include the scheme, for example https://example.com.`);
   }
   if (origin.protocol !== "https:" && origin.hostname !== "localhost" && origin.hostname !== "127.0.0.1") {
-    throw new Error(`BETTER_AUTH_URL must use HTTPS outside local development: "${baseURL}".`);
+    throw new Error(`BETTER_AUTH_URL must use HTTPS outside local development: "${rawBaseURL}".`);
   }
   return { secret, baseURL, origin };
 }
