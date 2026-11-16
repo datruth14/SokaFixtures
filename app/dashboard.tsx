@@ -907,7 +907,7 @@ function FixtureRow({
         <div className="text-[10px] text-slate-600">{fixture.isoDate}</div>
       </td>
       <td className="px-2 py-3">
-        <span className="chip">{fixture.league}</span>
+        <span className="chip">{[fixture.country, fixture.league].filter(Boolean).join(" · ")}</span>
       </td>
       <td className="px-2 py-3">
         <div className="flex flex-col gap-0.5">
