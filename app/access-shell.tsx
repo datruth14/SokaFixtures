@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import { PAYMENTS_ENABLED } from "@/lib/features";
 import { DashboardProvider } from "./dashboard";
 
 export function AccessShell({ children }: { children: React.ReactNode }) {
@@ -16,6 +17,7 @@ export function AccessShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!protectedPage || isPending) return;
     if (!session?.user) { checkedUserId.current = null; setAccess("denied"); return; }
+    if (!PAYMENTS_ENABLED) { setAccess("allowed"); return; }
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
     if (checkedUserId.current !== session.user.id) {
@@ -39,10 +41,14 @@ export function AccessShell({ children }: { children: React.ReactNode }) {
   }, [protectedPage, isPending, session?.user?.id, pathname]);
 
   if (!protectedPage) return children;
-  if (isPending || (session?.user && access === "loading")) return <div className="flex min-h-screen items-center justify-center text-sm text-slate-400">Checking your account…</div>;
-  if (error || access === "error") return <AccountGate title="Account service unavailable" text="Please try again later." href="/billing" action="Open billing" />;
-  if (!session?.user) return <AccountGate title="Welcome to SokaFix" text="Sign in or create an account to start your seven-day trial." href="/account" action="Sign in or create account" />;
-  if (access !== "allowed") return <AccountGate title="Activate SokaFix Premium" text="Start your trial or manage your subscription to access fixtures and the accumulator." href="/billing" action="View subscription" />;
+  if (isPending) return <div className="flex min-h-screen items-center justify-center text-sm text-slate-400">Checking your account…</div>;
+  if (!session?.user) return <AccountGate title="Welcome to SokaFix" text="Sign in or create a free account to access fixtures and the accumulator." href="/account" action="Sign in or create account" />;
+  if (error) return <AccountGate title="Account service unavailable" text="Please try again later." href="/account" action="Sign in" />;
+  if (PAYMENTS_ENABLED) {
+    if (access === "loading") return <div className="flex min-h-screen items-center justify-center text-sm text-slate-400">Checking your account…</div>;
+    if (access === "error") return <AccountGate title="Account service unavailable" text="Please try again later." href="/billing" action="Open account" />;
+    if (access !== "allowed") return <AccountGate title="SokaFix Premium" text="Start your trial or manage your subscription to access fixtures and the accumulator." href="/billing" action="View subscription" />;
+  }
   return <DashboardProvider>{children}</DashboardProvider>;
 }
 
@@ -50,10 +56,10 @@ function AccountGate({ title, text, href, action }: { title: string; text: strin
   return (
     <main className="flex min-h-screen items-center justify-center px-4">
       <div className="glass-card-accent w-full max-w-md p-8 text-center">
-        <p className="eyebrow">SokaFix Premium</p>
+        <p className="eyebrow">SokaFix</p>
         <h1 className="mt-4 text-2xl font-semibold text-white">{title}</h1>
         <p className="mt-3 text-sm leading-6 text-slate-300">{text}</p>
-        <Link className="btn-solid mt-6" href={href}>{action}</Link>
+        <Link href={href} className="btn-solid mt-6">{action}</Link>
       </div>
     </main>
   );

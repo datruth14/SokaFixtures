@@ -12,7 +12,6 @@ export default function Home() {
             <span><span className="block text-base font-bold tracking-[-0.04em] text-white">SokaFix<span className="text-cyan-200">.</span></span><span className="block text-[10px] font-medium tracking-wide text-slate-500">FOOTBALL WORKSPACE</span></span>
           </Link>
           <nav aria-label="Account navigation" className="ml-auto flex items-center gap-2 sm:gap-3">
-            <a href="#pricing" className="hidden px-3 py-2 text-sm text-slate-400 hover:text-white sm:inline-flex">Pricing</a>
             <Link href="/account" className="btn-ghost text-xs sm:text-sm">Sign in</Link>
             <Link href="/account?mode=register" className="btn-solid text-xs sm:text-sm">Create account <ArrowUpRight size={14} /></Link>
           </nav>
@@ -31,7 +30,7 @@ export default function Home() {
                 <Link href="/account?mode=register" className="btn-solid px-5 py-3">Create an account <ArrowRight size={16} /></Link>
                 <Link href="/account" className="btn-ghost px-5 py-3">I already have an account</Link>
               </div>
-              <p className="mt-5 max-w-lg text-xs leading-5 text-slate-400">7-day trial available. ₦50 card verification is charged and a refund is requested. Then ₦5,000/month unless cancelled.</p>
+              <p className="mt-5 max-w-lg text-xs leading-5 text-slate-400">Free access right now. Create an account and start exploring — no payment required.</p>
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:col-span-5">
@@ -50,14 +49,14 @@ export default function Home() {
           <Feature icon={<Activity size={18} />} title="Build your slip" text="Generate combinations and review the selections, odds, and match details." />
         </section>
 
-        <section id="pricing" className="glass-card mt-4 flex scroll-mt-6 flex-wrap items-center justify-between gap-6 p-6 sm:p-8" aria-labelledby="pricing-title">
+        <section id="access" className="glass-card mt-4 flex scroll-mt-6 flex-wrap items-center justify-between gap-6 p-6 sm:p-8" aria-labelledby="access-title">
           <div className="max-w-2xl">
-            <p className="eyebrow"><ShieldCheck size={13} /> Simple membership</p>
-            <h2 id="pricing-title" className="mt-3 text-2xl font-semibold tracking-tight text-white">Start with seven days.</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-400">Enjoy full access during your trial. A ₦50 card verification charge is made and a full refund is requested. After seven days, Premium renews at ₦5,000 per month unless you cancel.</p>
-            <p className="mt-3 flex items-center gap-2 text-xs text-slate-400"><Check size={14} className="text-cyan-200" /> Manage or cancel your subscription from your account.</p>
+            <p className="eyebrow"><ShieldCheck size={13} /> Free access</p>
+            <h2 id="access-title" className="mt-3 text-2xl font-semibold tracking-tight text-white">Free while we build.</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-400">Create an account and use the fixture board, prediction filters and accumulator at no cost. No card, no trial, no subscription.</p>
+            <p className="mt-3 flex items-center gap-2 text-xs text-slate-400"><Check size={14} className="text-cyan-200" /> Full access with a free SokaFix account.</p>
           </div>
-          <div><p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Premium</p><p className="mt-1 text-3xl font-semibold tracking-tight text-white">₦5,000 <span className="text-sm font-normal text-slate-400">/ month</span></p><Link href="/account?mode=register" className="btn-solid mt-4">Get started <ArrowRight size={15} /></Link></div>
+          <div><p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Price</p><p className="mt-1 text-3xl font-semibold tracking-tight text-white">Free</p><Link href="/account?mode=register" className="btn-solid mt-4">Create account <ArrowRight size={15} /></Link></div>
         </section>
       </main>
       <footer className="relative z-10 mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 border-t border-white/[0.07] px-4 py-6 text-xs text-slate-500 sm:px-6 lg:px-8"><p>© {new Date().getFullYear()} SokaFix. Football, made easier to explore.</p><p>18+ · Predictions are informational, not guarantees.</p></footer>

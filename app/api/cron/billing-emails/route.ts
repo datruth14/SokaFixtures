@@ -1,12 +1,14 @@
 import { timingSafeEqual } from "node:crypto";
 import { databaseClient } from "@/lib/db";
 import { deliverBillingEmail, queueBillingEmail } from "@/lib/billing/email-outbox";
+import { PAYMENTS_ENABLED } from "@/lib/features";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 export async function GET(request: Request) {
+  if (!PAYMENTS_ENABLED) return Response.json({ skipped: "Payments are disabled." }, { headers: { "Cache-Control": "no-store" } });
   const secret = process.env.CRON_SECRET;
   if (!secret) return new Response("Cron is not configured", { status: 503 });
   const actual = Buffer.from(request.headers.get("authorization") ?? "");

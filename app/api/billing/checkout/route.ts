@@ -1,10 +1,12 @@
-import { authenticatedUser, sameOrigin } from "@/lib/billing/request";
+import { authenticatedUser, paymentsDisabled, sameOrigin } from "@/lib/billing/request";
 import { startCheckout } from "@/lib/billing/service";
+import { PAYMENTS_ENABLED } from "@/lib/features";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  if (!PAYMENTS_ENABLED) return paymentsDisabled();
   if (!sameOrigin(request)) return Response.json({ error: "Invalid request origin." }, { status: 403 });
   try {
     const user = await authenticatedUser(request);

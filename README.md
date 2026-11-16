@@ -4,6 +4,8 @@ Next.js football fixtures and accumulator app. Requires Node.js 20.9 or newer.
 
 ## Premium subscriptions
 
+> **Payments are currently disabled.** `PAYMENTS_ENABLED` in `lib/features.ts` is `false`, so every signed-in user has free access. Checkout, confirmation, management, webhook and billing-email routes return `410`, the daily cron is removed from `vercel.json`, and `/billing` shows a simple free-access account page. The billing code and database tables remain in place; set the flag to `true` to re-enable the flow described below.
+
 This integration is **not ready for live charges until it has been configured and tested end to end with your own Paystack test account**. New checkout is disabled by default. All fixture and prompt APIs require a verified account and an active trial or paid entitlement, so an unconfigured deployment will not give access to the app.
 
 The current offer is a seven-day trial. Paystack collects a **₦50 card verification charge**; SokaFix requests a full refund and schedules a ₦5,000/month subscription after the trial. The customer explicitly consents to recurring billing and can use Paystack's hosted subscription-management page to cancel. The bank may take time to return the verification charge. SokaFix never receives or stores raw card details.

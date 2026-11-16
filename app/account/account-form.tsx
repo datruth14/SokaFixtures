@@ -29,11 +29,11 @@ export default function AccountForm({ initialMode }: { initialMode: "sign-in" | 
       } else if (mode === "sign-up") {
         const result = await authClient.signUp.email({ name, email, password });
         if (result.error) setMessage(result.error.message ?? "Unable to create the account.");
-        else { router.push("/billing"); router.refresh(); }
+        else { router.push("/fixtures"); router.refresh(); }
       } else {
         const result = await authClient.signIn.email({ email, password });
         if (result.error) setMessage("Unable to sign in. Check your email and password.");
-        else { router.push("/billing"); router.refresh(); }
+        else { router.push("/fixtures"); router.refresh(); }
       }
     } catch {
       setMessage("Account service is unavailable. Please try again later.");
@@ -47,11 +47,11 @@ export default function AccountForm({ initialMode }: { initialMode: "sign-in" | 
       <div className="glass-card w-full max-w-md p-6 sm:p-8">
         <Link href="/" className="eyebrow">SokaFix</Link>
         <h1 className="mt-4 text-2xl font-semibold text-white">{mode === "sign-up" ? "Create your account" : mode === "forgot" ? "Reset your password" : "Welcome back"}</h1>
-        <p className="mt-2 text-sm text-slate-400">Use your email and password to manage your subscription.</p>
+        <p className="mt-2 text-sm text-slate-400">Use your email and password to access SokaFix.</p>
         {isPending ? <p className="mt-6 text-sm text-slate-400">Checking your account…</p> : session?.user ? (
           <div className="mt-6 space-y-4 text-sm text-slate-300">
             <p>Signed in as {session.user.email}</p>
-            <Link href="/billing" className="btn-solid">Open subscription</Link>
+            <Link href="/fixtures" className="btn-solid">Open SokaFix</Link>
             <button className="btn-ghost ml-2" onClick={() => void authClient.signOut().then(() => router.refresh())}>Sign out</button>
           </div>
         ) : (

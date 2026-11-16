@@ -1,11 +1,14 @@
 import { billingConfiguration } from "@/lib/billing/paystack";
 import { verifyWebhookSignature } from "@/lib/billing/policy";
 import { processPaystackEvent } from "@/lib/billing/webhook";
+import { paymentsDisabled } from "@/lib/billing/request";
+import { PAYMENTS_ENABLED } from "@/lib/features";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  if (!PAYMENTS_ENABLED) return paymentsDisabled();
   try {
     const { secret } = billingConfiguration();
     const raw = Buffer.from(await request.arrayBuffer());

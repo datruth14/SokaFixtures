@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { getSession } from "../auth";
 import { billingStatus } from "./service";
+import { PAYMENTS_ENABLED } from "../features";
+
+export function paymentsDisabled(): NextResponse {
+  return NextResponse.json({ error: "Payments are disabled. SokaFix is free to use." }, { status: 410, headers: { "Cache-Control": "no-store" } });
+}
 
 export function sameOrigin(request: Request): boolean {
   const origin = request.headers.get("origin");
@@ -18,6 +23,7 @@ export async function authenticatedUser(request: Request) {
 export async function requirePremium(request: Request): Promise<NextResponse | null> {
   const user = await authenticatedUser(request);
   if (!user) return NextResponse.json({ error: "Sign in to continue." }, { status: 401, headers: { "Cache-Control": "no-store" } });
+  if (!PAYMENTS_ENABLED) return null;
   if (!(await billingStatus(user.id)).hasAccess) return NextResponse.json({ error: "An active trial or subscription is required." }, { status: 403, headers: { "Cache-Control": "no-store" } });
   return null;
 }
