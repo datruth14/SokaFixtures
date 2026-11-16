@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SokaFix">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#12263f"/>
+      <stop offset="1" stop-color="#060d18"/>
+    </linearGradient>
+    <linearGradient id="cup" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cffafe"/>
+      <stop offset="0.55" stop-color="#67e8f9"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="url(#bg)"/>
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="14.25" fill="none" stroke="#67e8f9" stroke-opacity="0.25" stroke-width="1.5"/>
+  <g fill="url(#cup)" stroke="url(#cup)">
+    <!-- cup bowl -->
+    <path d="M20 13h24v8a12 12 0 0 1-24 0z" stroke="none"/>
+    <!-- handles -->
+    <path d="M20 15h-3a5 5 0 0 0 0 10h4.2" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M44 15h3a5 5 0 0 1 0 10h-4.2" fill="none" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- stem and flared supports -->
+    <path d="M29.5 33.5h5v3.9l4 6.6c.9 1.5-.2 3.4-2 3.4h-9c-1.8 0-2.9-1.9-2-3.4l4-6.6z" stroke="none"/>
+    <!-- base -->
+    <rect x="21.5" y="47.5" width="21" height="4" rx="2" stroke="none"/>
+  </g>
+</svg>
